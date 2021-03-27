@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Sudoku"
-run/main_scene="res://src/Main/Main.tscn"
+run/main_scene="res://src/scenes/Main/Main.tscn"
 config/icon="res://icon.png"
 
 [display]
