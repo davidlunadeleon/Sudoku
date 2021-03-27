@@ -6,16 +6,14 @@ const NCOLS = 9
 const INVALID_TILE = Vector2(-1.0, -1.0)
 var tmap_transform
 var selected_tile
+var sudoku
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	tmap_transform = $Grid_TileMap.get_transform()
 	selected_tile = INVALID_TILE
+	sudoku = Sudoku.new()
 	clear_grid()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 
 func clear_grid():
 	for x in range(NROWS):
@@ -68,10 +66,13 @@ func pos_to_cell_index(mouse_pos):
 
 func clear_select():
 	if is_tile_valid(selected_tile):
+		sudoku.clear_cell(selected_tile)
 		$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, -1)
 	selected_tile = INVALID_TILE
 
 func set_select(tile):
+	if tile >= 0 && tile <= 8:
+		sudoku.set_cell(selected_tile, tile + 1)
 	$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, tile)
 
 func is_tile_valid(tile):
