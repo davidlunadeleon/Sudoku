@@ -66,14 +66,17 @@ func pos_to_cell_index(mouse_pos):
 
 func clear_select():
 	if is_tile_valid(selected_tile):
-		sudoku.clear_cell(selected_tile)
+		sudoku.clear_cell(Vector2(selected_tile.y, selected_tile.x)) # Invert x and y to match matrix indexing
 		$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, -1)
 	selected_tile = INVALID_TILE
 
 func set_select(tile):
 	if tile >= 0 && tile <= 8:
-		sudoku.set_cell(selected_tile, tile + 1)
+		sudoku.set_cell(Vector2(selected_tile.y, selected_tile.x), tile + 1) # Invert x and y to match matrix indexing
 	$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, tile)
 
 func is_tile_valid(tile):
 	return tile.x >= 0 && tile.x <= 9 && tile.y >= 0 && tile.y <= 9
+
+func solve():
+	return true
