@@ -4,6 +4,7 @@ extends Node2D
 const INITIAL_DOMAIN = [1,2,3,4,5,6,7,8,9]
 const NROWS = 9
 const NCOLS = 9
+const INVALID_TILE = Vector2(-1.0, -1.0)
 var tmap_transform
 var grid
 var selected_tile
@@ -12,7 +13,7 @@ var selected_tile
 func _ready():
 	grid = []
 	tmap_transform = $Grid_TileMap.get_transform()
-	selected_tile = Vector2()
+	selected_tile = INVALID_TILE
 	clear_grid()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -37,7 +38,7 @@ func _input(event):
 			clear_select()
 			var mouse_pos = get_viewport().get_mouse_position()
 			var tile_pos = pos_to_cell_index(mouse_pos)
-			if(tile_pos.x >= 0 && tile_pos.y >= 0):
+			if is_tile_valid(tile_pos):
 				$Grid_TileMap.set_cell(tile_pos.x, tile_pos.y, 9)
 				selected_tile = tile_pos
 
@@ -48,8 +49,12 @@ func pos_to_cell_index(mouse_pos):
 		var cell_pos = $Grid_TileMap.world_to_map(mouse_pos)
 		return Vector2(cell_pos.x, cell_pos.y)
 	else:
-		return Vector2(-1.0, -1.0)
+		return INVALID_TILE
 
 func clear_select():
-	$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, -1)
-	selected_tile = Vector2()
+	if is_tile_valid(selected_tile):
+		$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, -1)
+	selected_tile = INVALID_TILE
+
+func is_tile_valid(tile):
+	return tile.x >= 0 && tile.x <= 9 && tile.y >= 0 && tile.y <= 9
