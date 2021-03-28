@@ -1,5 +1,8 @@
 extends Node2D
 
+signal message(message)
+signal error(message)
+
 # Declare member variables here.
 const NROWS = 9
 const NCOLS = 9
@@ -86,5 +89,8 @@ func solve():
 		for x in range(NROWS):
 			for y in range(NCOLS):
 				$Grid_TileMap.set_cell(x, y, grid[y][x] - 1)
+		emit_signal("message", "Puzzle solved!")
 	else:
 		print("Not solvable :(")
+		emit_signal("error", "Puzzle is unsolvable. Try another one.")
+

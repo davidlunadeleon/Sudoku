@@ -18,3 +18,15 @@ func _on_QuitButton_pressed():
 
 func _on_SolveButton_pressed():
 	emit_signal("solve")
+
+func write_message(message):
+	$Message.text = message
+	yield(get_tree().create_timer(2), "timeout")
+	$Message.text = ""
+
+func write_error(message):
+	$Message.text = message
+	$Message.add_color_override("font_color", Color(1,0,0,1))
+	yield(get_tree().create_timer(2), "timeout")
+	$Message.add_color_override("font_color", Color(1,1,1,1))
+	$Message.text = ""
