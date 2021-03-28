@@ -74,9 +74,17 @@ func set_select(tile):
 	if tile >= 0 && tile <= 8:
 		sudoku.set_cell(Vector2(selected_tile.y, selected_tile.x), tile + 1) # Invert x and y to match matrix indexing
 	$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, tile)
+	selected_tile = INVALID_TILE
 
 func is_tile_valid(tile):
 	return tile.x >= 0 && tile.x <= 9 && tile.y >= 0 && tile.y <= 9
 
 func solve():
-	return true
+	if sudoku.solve():
+		print("Solved!")
+		var grid = sudoku.get_grid()
+		for x in range(NROWS):
+			for y in range(NCOLS):
+				$Grid_TileMap.set_cell(x, y, grid[y][x] - 1)
+	else:
+		print("Not solvable :(")

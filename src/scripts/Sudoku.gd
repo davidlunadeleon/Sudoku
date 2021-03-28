@@ -133,6 +133,7 @@ func backtrack(depth):
 	return false
 
 func solve():
+	var temp_domains = domains.duplicate()
 	if ac3_algorithm():
 		sort_cells()
 		if backtrack(0):
@@ -140,5 +141,8 @@ func solve():
 				var x = key[0].to_int()
 				var y = key[1].to_int()
 				grid[x][y] = domains.get(key).front()
+			sorted_cells.clear()
 			return true
+	sorted_cells.clear()
+	domains = temp_domains
 	return false
