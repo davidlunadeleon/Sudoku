@@ -185,9 +185,9 @@ func gen(difficulty):
 	var keys_to_del = domains.keys().duplicate()
 	keys_to_del.shuffle()
 	var n_to_del
-	if difficulty == "easy":
+	if difficulty == 0:
 		 n_to_del = rng.randi_range(15, 25)
-	elif difficulty == "medium":
+	elif difficulty == 1:
 		 n_to_del = rng.randi_range(30, 45)
 	else:
 		 n_to_del = rng.randi_range(50, 60)

@@ -21,4 +21,5 @@ __meta__ = {
 [connection signal="is_solved" from="Game" to="HUD" method="_on_Game_is_solved"]
 [connection signal="message" from="Game" to="HUD" method="_on_Game_message"]
 [connection signal="new_game" from="HUD" to="Game" method="_on_HUD_new_game"]
+[connection signal="new_solver" from="HUD" to="Game" method="_on_HUD_new_solver"]
 [connection signal="solve" from="HUD" to="Game" method="_on_HUD_solve"]

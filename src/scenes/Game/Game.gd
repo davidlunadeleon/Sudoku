@@ -31,10 +31,14 @@ func clear_grid():
 			selected_tile = Vector2(x, y)
 			clear_select()
 
-func _on_HUD_new_game():
+func _on_HUD_new_game(difficulty):
 	clear_grid()
-	sudoku.gen("easy")
+	sudoku.gen(difficulty)
 	read_grid()
+	emit_signal("message", "Starting new game")
+
+func _on_HUD_new_solver():
+	clear_grid()
 	emit_signal("message", "Starting new game")
 
 func check_completed():
@@ -55,7 +59,6 @@ func _input(event):
 					selected_tile = tile_pos
 		elif event is InputEventKey && is_tile_valid(selected_tile):
 			place_number(event)
-			print(placed_tiles)
 			check_completed()
 
 func place_number(event):

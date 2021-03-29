@@ -75,6 +75,68 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="EasyButton" type="Button" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -192.0
+margin_right = 128.0
+margin_bottom = -131.0
+custom_fonts/font = SubResource( 1 )
+text = "Easy"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MediumButton" type="Button" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -128.0
+margin_right = 128.0
+margin_bottom = -67.0
+custom_fonts/font = SubResource( 1 )
+text = "Medium"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HardButton" type="Button" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -64.0
+margin_right = 128.0
+margin_bottom = -3.0
+custom_fonts/font = SubResource( 1 )
+text = "Hard"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SolverButton" type="Button" parent="."]
+visible = false
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 40.0
+margin_top = -160.0
+margin_right = 280.0
+margin_bottom = -32.0
+custom_fonts/font = SubResource( 1 )
+text = "Solver mode"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Message" type="Label" parent="."]
 margin_top = 1024.0
 margin_right = 1024.0
@@ -87,3 +149,7 @@ __meta__ = {
 [connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
 [connection signal="pressed" from="NewGameButton" to="." method="_on_NewGameButton_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="pressed" from="EasyButton" to="." method="_on_Difficulty_pressed" binds= [ 0 ]]
+[connection signal="pressed" from="MediumButton" to="." method="_on_Difficulty_pressed" binds= [ 1 ]]
+[connection signal="pressed" from="HardButton" to="." method="_on_Difficulty_pressed" binds= [ 2 ]]
+[connection signal="pressed" from="SolverButton" to="." method="_on_SolverButton_pressed"]
