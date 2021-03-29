@@ -84,3 +84,6 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
+[connection signal="pressed" from="NewGameButton" to="." method="_on_NewGameButton_pressed"]
+[connection signal="pressed" from="QuitButton" to="." method="_on_QuitButton_pressed"]

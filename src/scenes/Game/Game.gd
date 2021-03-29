@@ -21,7 +21,12 @@ func _ready():
 func clear_grid():
 	for x in range(NROWS):
 		for y in range(NCOLS):
-			$Grid_TileMap.set_cell(x, y, -1)
+			selected_tile = Vector2(x, y)
+			clear_select()
+
+func _on_HUD_new_game():
+	clear_grid()
+	emit_signal("message", "Starting new game")
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -82,7 +87,7 @@ func set_select(tile):
 func is_tile_valid(tile):
 	return tile.x >= 0 && tile.x <= 9 && tile.y >= 0 && tile.y <= 9
 
-func solve():
+func _on_HUD_solve():
 	if sudoku.solve():
 		print("Solved!")
 		var grid = sudoku.get_grid()
@@ -93,4 +98,3 @@ func solve():
 	else:
 		print("Not solvable :(")
 		emit_signal("error", "Puzzle is unsolvable. Try another one.")
-

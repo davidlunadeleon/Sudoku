@@ -1,13 +1,13 @@
 extends CanvasLayer
 
 signal solve
+signal new_game
 
-# Declare member variables here. Examples:
+# Declare member variables here.
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$QuitButton.connect("pressed", self, "_on_QuitButton_pressed")
-	$SolveButton.connect("pressed", self, "_on_SolveButton_pressed")
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -19,12 +19,15 @@ func _on_QuitButton_pressed():
 func _on_SolveButton_pressed():
 	emit_signal("solve")
 
-func write_message(message):
+func _on_NewGameButton_pressed():
+	emit_signal("new_game")
+
+func _on_Game_message(message):
 	$Message.text = message
 	yield(get_tree().create_timer(2), "timeout")
 	$Message.text = ""
 
-func write_error(message):
+func _on_Game_error(message):
 	$Message.text = message
 	$Message.add_color_override("font_color", Color(1,0,0,1))
 	yield(get_tree().create_timer(2), "timeout")

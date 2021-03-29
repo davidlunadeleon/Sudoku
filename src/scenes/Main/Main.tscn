@@ -17,3 +17,7 @@ __meta__ = {
 [node name="Game" parent="." instance=ExtResource( 1 )]
 
 [node name="HUD" parent="." instance=ExtResource( 2 )]
+[connection signal="error" from="Game" to="HUD" method="_on_Game_error"]
+[connection signal="message" from="Game" to="HUD" method="_on_Game_message"]
+[connection signal="new_game" from="HUD" to="Game" method="_on_HUD_new_game"]
+[connection signal="solve" from="HUD" to="Game" method="_on_HUD_solve"]
