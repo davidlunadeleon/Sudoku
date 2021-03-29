@@ -80,7 +80,9 @@ func clear_select():
 
 func set_select(tile):
 	if tile >= 0 && tile <= 8:
-		sudoku.set_cell(Vector2(selected_tile.y, selected_tile.x), tile + 1) # Invert x and y to match matrix indexing
+		if !sudoku.set_cell(Vector2(selected_tile.y, selected_tile.x), tile + 1): # Invert x and y to match matrix indexing
+			emit_signal("error", "Number not valid. Try another one.")
+			tile = -1
 	$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, tile)
 	selected_tile = INVALID_TILE
 

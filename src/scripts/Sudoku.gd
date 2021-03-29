@@ -48,8 +48,14 @@ func init_constraints():
 						constraints.get(key).push_back(str(x) + str(y))
 
 func set_cell(pos, val):
-	grid[pos.x][pos.y] = val
-	domains[str(pos.x) + str(pos.y)] = [val]
+	var key = str(pos.x) + str(pos.y)
+	domains[key] = [val]
+	if is_var_consistent(key):
+		grid[pos.x][pos.y] = val
+		return true
+	else:
+		clear_cell(pos)
+		return false
 
 func clear_cell(pos):
 	grid[pos.x][pos.y] = 0
