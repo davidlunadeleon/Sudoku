@@ -26,6 +26,8 @@ func clear_grid():
 
 func _on_HUD_new_game():
 	clear_grid()
+	sudoku.gen("easy")
+	read_grid()
 	emit_signal("message", "Starting new game")
 
 func _input(event):
@@ -100,3 +102,14 @@ func _on_HUD_solve():
 		emit_signal("message", "Puzzle solved!")
 	else:
 		emit_signal("error", "Puzzle is unsolvable. Try another one.")
+
+func read_grid():
+	var grid = sudoku.get_grid()
+	for x in range(NROWS):
+		for y in range(NCOLS):
+			if $Grid_TileMap.get_cell(x, y) == -1:
+				selected_tile = Vector2(x, y)
+				if grid[y][x] == 0:
+					clear_select()
+				else:
+					set_select(grid[y][x] + 9)

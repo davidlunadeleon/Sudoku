@@ -11,8 +11,11 @@ var grid
 var domains
 var constraints
 var sorted_cells
+var rng
 
 func _init():
+	randomize()
+	rng = RandomNumberGenerator.new()
 	grid = []
 	sorted_cells = []
 	domains = {}
@@ -152,3 +155,45 @@ func solve():
 	sorted_cells.clear()
 	domains = temp_domains
 	return false
+
+func clear_grid():
+	for x in range(NROWS):
+		for y in range(NCOLS):
+			clear_cell(Vector2(x, y))
+
+func verify_rows(rows):
+	for i in range(NCOLS):
+		var row = rows[i]
+		var key = str(row) + str(i)
+		if !is_var_consistent(key):
+			return false
+	return true
+
+func gen(difficulty):
+	var randNum = (randi() % 9) + 1
+	var rows = range(9)
+	var verified = false
+	while !verified:
+		clear_grid()
+		rows.shuffle()
+		for x in range(NCOLS):
+			var row = rows[x]
+			grid[row][x] = randNum
+			domains[str(row) + str(x)] = [randNum]
+		verified = verify_rows(rows)
+	solve()
+	var keys_to_del = domains.keys().duplicate()
+	keys_to_del.shuffle()
+	var n_to_del
+	if difficulty == "easy":
+		 n_to_del = rng.randi_range(15, 25)
+	elif difficulty == "medium":
+		 n_to_del = rng.randi_range(30, 45)
+	else:
+		 n_to_del = rng.randi_range(50, 60)
+	keys_to_del.resize(n_to_del)
+	while !keys_to_del.empty():
+		var key = keys_to_del.pop_back()
+		var x = key[0].to_int()
+		var y = key[1].to_int()
+		clear_cell(Vector2(x, y))
