@@ -89,12 +89,12 @@ func is_tile_valid(tile):
 
 func _on_HUD_solve():
 	if sudoku.solve():
-		print("Solved!")
 		var grid = sudoku.get_grid()
 		for x in range(NROWS):
 			for y in range(NCOLS):
-				$Grid_TileMap.set_cell(x, y, grid[y][x] - 1)
+				if $Grid_TileMap.get_cell(x, y) == -1:
+					selected_tile = Vector2(x, y)
+					set_select(grid[y][x] + 9)
 		emit_signal("message", "Puzzle solved!")
 	else:
-		print("Not solvable :(")
 		emit_signal("error", "Puzzle is unsolvable. Try another one.")

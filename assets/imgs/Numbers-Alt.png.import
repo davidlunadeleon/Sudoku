@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Numbers-TileMap.png-ddfa70af3f4be2e2e859781cebad1ec4.stex"
+path="res://.import/Numbers-Alt.png-5b0caf76a2a8d36e0684fcc7a51c765e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/imgs/Numbers-TileMap.png"
-dest_files=[ "res://.import/Numbers-TileMap.png-ddfa70af3f4be2e2e859781cebad1ec4.stex" ]
+source_file="res://assets/imgs/Numbers-Alt.png"
+dest_files=[ "res://.import/Numbers-Alt.png-5b0caf76a2a8d36e0684fcc7a51c765e.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
