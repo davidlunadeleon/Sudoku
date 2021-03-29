@@ -18,9 +18,14 @@ func _on_QuitButton_pressed():
 
 func _on_SolveButton_pressed():
 	emit_signal("solve")
+	$SolveButton.set_disabled(true)
+
+func _on_Game_is_solved():
+	$SolveButton.set_disabled(true)
 
 func _on_NewGameButton_pressed():
 	emit_signal("new_game")
+	$SolveButton.set_disabled(false)
 
 func _on_Game_message(message):
 	$Message.text = message

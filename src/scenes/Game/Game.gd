@@ -2,6 +2,7 @@ extends Node2D
 
 signal message(message)
 signal error(message)
+signal is_solved
 
 # Declare member variables here.
 const NROWS = 9
@@ -10,15 +11,21 @@ const INVALID_TILE = Vector2(-1.0, -1.0)
 var tmap_transform
 var selected_tile
 var sudoku
+var can_click
+var placed_tiles
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	tmap_transform = $Grid_TileMap.get_transform()
 	selected_tile = INVALID_TILE
 	sudoku = Sudoku.new()
+	can_click = true
+	placed_tiles = 0
 	clear_grid()
 
 func clear_grid():
+	can_click = true
+	placed_tiles = 0
 	for x in range(NROWS):
 		for y in range(NCOLS):
 			selected_tile = Vector2(x, y)
@@ -30,17 +37,26 @@ func _on_HUD_new_game():
 	read_grid()
 	emit_signal("message", "Starting new game")
 
+func check_completed():
+	if placed_tiles == 81:
+		can_click = false
+		emit_signal("message", "Sudoku solved! Good game")
+		emit_signal("is_solved")
+
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT && event.pressed:
-			clear_select()
-			var mouse_pos = get_viewport().get_mouse_position()
-			var tile_pos = pos_to_cell_index(mouse_pos)
-			if is_tile_valid(tile_pos):
-				$Grid_TileMap.set_cell(tile_pos.x, tile_pos.y, 9)
-				selected_tile = tile_pos
-	elif event is InputEventKey && is_tile_valid(selected_tile):
-		place_number(event)
+	if can_click:
+		if event is InputEventMouseButton:
+			if event.button_index == BUTTON_LEFT && event.pressed:
+				clear_select()
+				var mouse_pos = get_viewport().get_mouse_position()
+				var tile_pos = pos_to_cell_index(mouse_pos)
+				if is_tile_valid(tile_pos):
+					$Grid_TileMap.set_cell(tile_pos.x, tile_pos.y, 9)
+					selected_tile = tile_pos
+		elif event is InputEventKey && is_tile_valid(selected_tile):
+			place_number(event)
+			print(placed_tiles)
+			check_completed()
 
 func place_number(event):
 	if event.get_scancode() == KEY_1:
@@ -63,7 +79,6 @@ func place_number(event):
 		set_select(8)
 	else:
 		set_select(-1)
-	selected_tile = INVALID_TILE
 
 func pos_to_cell_index(mouse_pos):
 	if mouse_pos.x < 1024 && mouse_pos.y < 1024:
@@ -85,6 +100,10 @@ func set_select(tile):
 		if !sudoku.set_cell(Vector2(selected_tile.y, selected_tile.x), tile + 1): # Invert x and y to match matrix indexing
 			emit_signal("error", "Number not valid. Try another one.")
 			tile = -1
+		else:
+			placed_tiles = placed_tiles + 1
+	else:
+		placed_tiles = placed_tiles - 1
 	$Grid_TileMap.set_cell(selected_tile.x, selected_tile.y, tile)
 	selected_tile = INVALID_TILE
 
@@ -100,6 +119,7 @@ func _on_HUD_solve():
 					selected_tile = Vector2(x, y)
 					set_select(grid[y][x] + 9)
 		emit_signal("message", "Puzzle solved!")
+		can_click = false
 	else:
 		emit_signal("error", "Puzzle is unsolvable. Try another one.")
 
@@ -113,3 +133,4 @@ func read_grid():
 					clear_select()
 				else:
 					set_select(grid[y][x] + 9)
+					placed_tiles = placed_tiles + 2
