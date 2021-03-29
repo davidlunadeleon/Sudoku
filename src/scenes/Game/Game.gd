@@ -3,6 +3,7 @@ extends Node2D
 signal message(message)
 signal error(message)
 signal is_solved
+signal is_unsolved
 
 # Declare member variables here.
 const NROWS = 9
@@ -13,6 +14,7 @@ var selected_tile
 var sudoku
 var can_click
 var placed_tiles
+var unclickable_tiles
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,11 +23,13 @@ func _ready():
 	sudoku = Sudoku.new()
 	can_click = true
 	placed_tiles = 0
+	unclickable_tiles = []
 	clear_grid()
 
 func clear_grid():
 	can_click = true
 	placed_tiles = 0
+	unclickable_tiles.clear()
 	for x in range(NROWS):
 		for y in range(NCOLS):
 			selected_tile = Vector2(x, y)
@@ -54,7 +58,7 @@ func _input(event):
 				clear_select()
 				var mouse_pos = get_viewport().get_mouse_position()
 				var tile_pos = pos_to_cell_index(mouse_pos)
-				if is_tile_valid(tile_pos):
+				if !unclickable_tiles.has(tile_pos) && is_tile_valid(tile_pos):
 					$Grid_TileMap.set_cell(tile_pos.x, tile_pos.y, 9)
 					selected_tile = tile_pos
 		elif event is InputEventKey && is_tile_valid(selected_tile):
@@ -114,7 +118,10 @@ func is_tile_valid(tile):
 	return tile.x >= 0 && tile.x <= 9 && tile.y >= 0 && tile.y <= 9
 
 func _on_HUD_solve():
-	if sudoku.solve():
+	if placed_tiles == 0:
+		emit_signal("error", "Can't solve an empty puzzle!")
+		emit_signal("is_unsolved")
+	elif sudoku.solve():
 		var grid = sudoku.get_grid()
 		for x in range(NROWS):
 			for y in range(NCOLS):
@@ -135,5 +142,6 @@ func read_grid():
 				if grid[y][x] == 0:
 					clear_select()
 				else:
+					unclickable_tiles.push_back(selected_tile)
 					set_select(grid[y][x] + 9)
 					placed_tiles = placed_tiles + 2

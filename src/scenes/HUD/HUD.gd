@@ -23,12 +23,15 @@ func reset_hud():
 	$MediumButton.visible = false
 	$HardButton.visible = false
 
+func _on_Game_is_unsolved():
+	reset_hud()
+
 func _on_QuitButton_pressed():
 	get_tree().quit()
 
 func _on_SolveButton_pressed():
-	emit_signal("solve")
 	$SolveButton.set_disabled(true)
+	emit_signal("solve")
 
 func _on_Game_is_solved():
 	$SolveButton.set_disabled(true)
