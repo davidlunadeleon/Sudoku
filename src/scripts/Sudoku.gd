@@ -71,10 +71,12 @@ func get_grid():
 	return grid
 
 func remove_inconsistencies(key1, key2):
+	var domain1 = domains.get(key1)
 	var domain2 = domains.get(key2)
-	for x in domains.get(key1):
-		if domain2.size() == 1 && domain2.has(x):
-			domains.get(key1).erase(x)
+	if domain2.size() == 1:
+		var y = domain2.front()
+		if domain1.has(y):
+			domain1.erase(y)
 			return true
 	return false
 
