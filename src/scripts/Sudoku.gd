@@ -3,11 +3,9 @@ extends Node
 class_name Sudoku
 
 const INITIAL_DOMAIN = [1,2,3,4,5,6,7,8,9]
-const SAMPLE_ROW = [0,0,0,0,0,0,0,0,0]
 const NROWS = 9
 const NCOLS = 9
 const SQR_SIZE = 3
-var grid
 var domains
 var constraints
 var sorted_cells
@@ -16,7 +14,6 @@ var rng
 func _init():
 	randomize()
 	rng = RandomNumberGenerator.new()
-	grid = []
 	sorted_cells = []
 	domains = {}
 	constraints = {}
@@ -24,10 +21,8 @@ func _init():
 	init_constraints()
 
 func init():
-	grid.clear()
 	sorted_cells.clear()
 	for x in range(NROWS):
-		grid.push_back(SAMPLE_ROW.duplicate())
 		for y in range(NCOLS):
 			domains[str(x) + str(y)] = INITIAL_DOMAIN.duplicate()
 
@@ -54,17 +49,25 @@ func set_cell(pos, val):
 	var key = str(pos.x) + str(pos.y)
 	domains[key] = [val]
 	if is_var_consistent(key):
-		grid[pos.x][pos.y] = val
 		return true
 	else:
 		clear_cell(pos)
 		return false
 
 func clear_cell(pos):
-	grid[pos.x][pos.y] = 0
 	domains[str(pos.x) + str(pos.y)] = INITIAL_DOMAIN.duplicate()
 
 func get_grid():
+	var grid = []
+	for x in range(NCOLS):
+		var temp_row = []
+		for y in range(NROWS):
+			var key = str(x) + str(y)
+			if domains.get(key).size() > 1:
+				temp_row.push_back(0)
+			else:
+				temp_row.push_back(domains.get(key).front())
+		grid.push_back(temp_row)
 	return grid
 
 func remove_inconsistencies(key1, key2):
@@ -146,17 +149,13 @@ func solve():
 	if ac3_algorithm():
 		sort_cells()
 		if backtrack(0):
-			for key in domains.keys():
-				var x = key[0].to_int()
-				var y = key[1].to_int()
-				grid[x][y] = domains.get(key).front()
 			sorted_cells.clear()
 			return true
 	sorted_cells.clear()
 	domains = temp_domains
 	return false
 
-func clear_grid():
+func clear_domains():
 	for x in range(NROWS):
 		for y in range(NCOLS):
 			clear_cell(Vector2(x, y))
@@ -174,11 +173,10 @@ func gen(difficulty):
 	var rows = range(9)
 	var verified = false
 	while !verified:
-		clear_grid()
+		clear_domains()
 		rows.shuffle()
 		for x in range(NCOLS):
 			var row = rows[x]
-			grid[row][x] = randNum
 			domains[str(row) + str(x)] = [randNum]
 		verified = verify_rows(rows)
 	solve()
